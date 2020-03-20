@@ -26,7 +26,7 @@ func init() {
 	args := os.Args[1:]
 	err := globalFlags.Parse(args)
 	if err != nil {
-		log.Error("Arguments error: %s", err)
+		_, _ = fmt.Fprint(os.Stderr, fmt.Errorf("arguments error: %s", err))
 		os.Exit(1)
 	}
 	globalConfig = &Config{Verbose: verbose, Dist: outputDir}
