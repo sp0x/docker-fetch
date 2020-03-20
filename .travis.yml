@@ -1,7 +1,12 @@
 language: go
-go:
-- '1.11'
-- '1.12'
+
+matrix:
+  include:
+    - go: 1.11
+    - go: 1.12
+      env: LATEST=true
+
+
 cache:
   directories:
   - "$HOME/.git-dist"
@@ -10,16 +15,25 @@ before_script:
 before_install:
 - git config --global user.email "travis@example.com"
 - git config --global user.name "Travis CI"
+# gox simplifies building for multiple architectures
+- go get github.com/mitchellh/gox
+
 install:
 - go get -v -t ./...
+
 script:
 - export GIT_EXEC_PATH=$GIT_DIST_PATH
 - export PATH=$GIT_DIST_PATH:$PATH
 - make test-coverage
 - go vet ./...
 - go test -v -race ./...
+# Only build binaries from the latest Go release.
+- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="logshare.." -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+
+
 after_success:
 - bash <(curl -s https://codecov.io/bash)
+
 deploy:
   provider: releases
   api_key:
