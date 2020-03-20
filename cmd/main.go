@@ -30,6 +30,9 @@ func init() {
 		os.Exit(1)
 	}
 	globalConfig = &Config{Verbose: verbose, Dist: outputDir}
+	if !verbose {
+		log.SetLevel(log.WarnLevel)
+	}
 }
 
 func main() {
@@ -40,18 +43,23 @@ func main() {
 	imageName := globalFlags.Arg(0)
 	parts := strings.Split(imageName, ":")
 	imageName = parts[0]
-
+	parts = strings.Split(imageName, "/")
+	repoName := parts[0]
+	if len(parts) > 1 {
+		repoName = parts[1]
+	}
 	githubUrl := formatGithubUrl(imageName)
-	outputDir := formatOutputDir(imageName, globalConfig.Dist)
+	outputDir := formatOutputDir(repoName, globalConfig.Dist)
 	log.Infof("Cloning %v", githubUrl)
-	r, err := git.PlainClone(outputDir, false, &git.CloneOptions{
+	_, err := git.PlainClone(outputDir, false, &git.CloneOptions{
 		URL: githubUrl,
 	})
 	if err != nil {
-		log.Errorf("Error while cloning: %s", err)
+		_, _ = fmt.Fprint(os.Stderr, fmt.Errorf("error while cloning: %s", err))
+		os.Exit(1)
 		return
 	}
-	log.Info(r)
+	log.Infof("Cloned %s", imageName)
 
 }
 
@@ -64,10 +72,6 @@ func formatOutputDir(imageName string, baseDir string) string {
 
 func formatGithubUrl(imageName string) string {
 	parts := strings.Split(imageName, ":")
-	//tag := "latest"
-	//if len(parts)>1{
-	//	tag = parts[1]
-	//}
 	image := parts[0]
 	image = strings.Trim(strings.TrimLeft(image, "/"), "\t \n\r")
 	url := fmt.Sprintf("https://github.com/%s", image)
