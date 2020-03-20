@@ -15,7 +15,6 @@ cache:
 
 before_script:
   - export GIT_DIST_PATH=$HOME/.git-dist
-  - make build-git
 
 before_install:
   - git config --global user.email "travis@example.com"
