@@ -2,8 +2,8 @@ language: go
 
 matrix:
   include:
-    - go: 1.11
-    - go: 1.12
+    - go: '1.11'
+    - go: '1.12'
       env: LATEST=true
 
 
@@ -28,7 +28,7 @@ script:
 - go vet ./...
 - go test -v -race ./...
 # Only build binaries from the latest Go release.
-- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="logshare.." -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="docker-fetch.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
 
 
 after_success:
@@ -38,6 +38,9 @@ deploy:
   provider: releases
   api_key:
     secure: R5d3bKX75k0UPGFV46s8H2952CfdE0jFt+i7WHdK5qJ4fyYipLESUNotMNAJgj5uMWHhVMVa9bfHMSnVbUHckSGUkTcqchJdIcRWFXlnTzBkq/1k1slLuahM6jya4hDEFIdHyILtNLLCatAXjFQJqf7gNJLy+Lrch/kRB7TEcPAYMbZN0oLs8zd2PIesWe6KJqwo/X81932hhjUuuAUsXzpXRBvO08ynWF6NwWFbmH4bQixl0lemodrhKfT5htXULH2j5ZwD1w8yAwbmT4ppCFAuu4TOVYKINGE9JpocHs6hiI2KkLhyHArPbZOLa8s+fFLaU2xkn1HUqLpo16d+rvo+gih1e3qV38QPoe6BpcGnRCesj3IbbE55gvFgsF9pIee93uX99NBONrs9IFZA1XcFuA8dKe3lly/P8yhsP22gx3Qgj7cie3ATOz6mT9MTYW0lfq/fBaSMFt0Xnl/cgwJCOrJFsk7fOxPQDJ1hwBxH39ZgXLuaootBFU/rFAheuf7Ssgq2lnra8hJKKQOBlSoZorFJcg5MymcxkqAd8/3HBIgaxDzT1h/eHc0OB3T3/mz0z+6BXMKQa2pRV3pJwdqxtp9Azly3T3k9Vo8NiVaLTQVPolL8+birTl51LQ/t3tHsa2xe0xn3qk5V0McB3zY9uYfSCaFjyAYJRHtW9t0=
-  file: docker-fetch.linux.amd64
+  file:
+   - docker-fetch.linux.amd64
+   - docker-fetch.darwin.amd64
+   - docker-fetch.windows.amd64.exe
   on:
     repo: sp0x/docker-fetch
