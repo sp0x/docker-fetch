@@ -1,12 +1,14 @@
 package main
 
+import "strings"
+
 type ImageName struct {
 	FullName string
 	Name     string
 	Tag      string
 }
 
-func parseImageInfo(imgName string) ImageName {
+func ParseImageInfo(imgName string) ImageName {
 	parts := strings.Split(imgName, ":")
 	fullName := parts[0]
 	tag := "latest"

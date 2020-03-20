@@ -17,15 +17,15 @@ func init() {
 		DisableColors: true,
 		FullTimestamp: true,
 	})
-	initConfig()
 }
 
 func main() {
+	initConfig()
 	if globalFlags.NArg() == 0 {
 		globalFlags.Usage()
 		os.Exit(1)
 	}
-	imgInfo := parseImageInfo(globalFlags.Arg(0))
+	imgInfo := ParseImageInfo(globalFlags.Arg(0))
 	githubUrl := formatGithubUrl(imgInfo)
 	outputDir := formatOutputDir(imgInfo, globalConfig.Dist)
 	log.Infof("Cloning %v", githubUrl)

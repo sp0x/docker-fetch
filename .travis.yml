@@ -4,10 +4,8 @@ go:
   - "1.11"
   - "1.12"
 
-env:
-  - GIT_VERSION=master
-  - GIT_VERSION=v1.9.3
-  - GIT_VERSION=v2.11.0
+#env:
+
 
 cache:
   directories:
@@ -26,6 +24,7 @@ install:
 script:
   - export GIT_EXEC_PATH=$GIT_DIST_PATH
   - export PATH=$GIT_DIST_PATH:$PATH
+  - make test-coverage
   - go vet ./...
 
 after_success:
