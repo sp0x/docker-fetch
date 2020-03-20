@@ -1,1 +1,5 @@
 /.idea/
+coverage.out
+*~
+coverage.txt
+profile.out
