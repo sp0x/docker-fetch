@@ -1,31 +1,29 @@
 language: go
-
 go:
-  - "1.11"
-  - "1.12"
-
-#env:
-
-
+- '1.11'
+- '1.12'
 cache:
   directories:
-    - $HOME/.git-dist
-
+  - "$HOME/.git-dist"
 before_script:
-  - export GIT_DIST_PATH=$HOME/.git-dist
-
+- export GIT_DIST_PATH=$HOME/.git-dist
 before_install:
-  - git config --global user.email "travis@example.com"
-  - git config --global user.name "Travis CI"
-
+- git config --global user.email "travis@example.com"
+- git config --global user.name "Travis CI"
 install:
-  - go get -v -t ./...
-
+- go get -v -t ./...
 script:
-  - export GIT_EXEC_PATH=$GIT_DIST_PATH
-  - export PATH=$GIT_DIST_PATH:$PATH
-  - make test-coverage
-  - go vet ./...
-
+- export GIT_EXEC_PATH=$GIT_DIST_PATH
+- export PATH=$GIT_DIST_PATH:$PATH
+- make test-coverage
+- go vet ./...
+- go test -v -race ./...
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: releases
+  api_key:
+    secure: R5d3bKX75k0UPGFV46s8H2952CfdE0jFt+i7WHdK5qJ4fyYipLESUNotMNAJgj5uMWHhVMVa9bfHMSnVbUHckSGUkTcqchJdIcRWFXlnTzBkq/1k1slLuahM6jya4hDEFIdHyILtNLLCatAXjFQJqf7gNJLy+Lrch/kRB7TEcPAYMbZN0oLs8zd2PIesWe6KJqwo/X81932hhjUuuAUsXzpXRBvO08ynWF6NwWFbmH4bQixl0lemodrhKfT5htXULH2j5ZwD1w8yAwbmT4ppCFAuu4TOVYKINGE9JpocHs6hiI2KkLhyHArPbZOLa8s+fFLaU2xkn1HUqLpo16d+rvo+gih1e3qV38QPoe6BpcGnRCesj3IbbE55gvFgsF9pIee93uX99NBONrs9IFZA1XcFuA8dKe3lly/P8yhsP22gx3Qgj7cie3ATOz6mT9MTYW0lfq/fBaSMFt0Xnl/cgwJCOrJFsk7fOxPQDJ1hwBxH39ZgXLuaootBFU/rFAheuf7Ssgq2lnra8hJKKQOBlSoZorFJcg5MymcxkqAd8/3HBIgaxDzT1h/eHc0OB3T3/mz0z+6BXMKQa2pRV3pJwdqxtp9Azly3T3k9Vo8NiVaLTQVPolL8+birTl51LQ/t3tHsa2xe0xn3qk5V0McB3zY9uYfSCaFjyAYJRHtW9t0=
+  file: docker-fetch.linux.amd64
+  on:
+    repo: sp0x/docker-fetch
