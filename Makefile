@@ -19,7 +19,7 @@ ifneq ($(origin CI), undefined)
 endif
 
 build:
-	gox -os="linux" -arch="amd64" -output="docker-fetch.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
+	gox -os="linux" -arch="amd64" -output="docker-fetch.{{.OS}}.{{.Arch}}" -ldflags "-s -w -X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
 
 test:
 	@cd $(WORKDIR); \

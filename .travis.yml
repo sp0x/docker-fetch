@@ -8,6 +8,10 @@ matrix:
       env: LATEST=true
     - go: tip
 
+env:
+  global:
+    - UPXVER="3.95"
+
 before_install:
 # gox simplifies building for multiple architectures
 - go get github.com/mitchellh/gox
@@ -15,6 +19,16 @@ before_install:
 
 install:
 - go get -v -t ./...
+- echo "Installing upx .."
+- "{ [ -f upx/${UPXVER}/upx ]; } ||
+{ curl -OL https://github.com/upx/upx/releases/download/v${UPXVER}/upx-${UPXVER}-amd64_linux.tar.xz;
+tar xvf upx-${UPXVER}-amd64_linux.tar.xz;
+mkdir -p upx;
+mv upx-${UPXVER}-amd64_linux upx/${UPXVER};
+}"
+- export PATH="${TRAVIS_BUILD_DIR}/upx/${UPXVER}/:${PATH}"
+- upx --version | grep -E '^upx'
+
 
 script:
 - export GIT_EXEC_PATH=$GIT_DIST_PATH
@@ -23,8 +37,8 @@ script:
 - go vet ./...
 #- go test -v -race ./...
 # Only build binaries from the latest Go release.
-- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="docker-fetch.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
-
+- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="docker-fetch.{{.OS}}.{{.Arch}}" -ldflags "-s -w -X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+- upx docker-fetch.*
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
