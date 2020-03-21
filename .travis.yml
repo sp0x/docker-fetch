@@ -38,3 +38,5 @@ deploy:
    - docker-fetch.windows.amd64.exe
   on:
     repo: sp0x/docker-fetch
+    tags: true
+
