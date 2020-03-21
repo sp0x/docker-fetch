@@ -18,6 +18,8 @@ ifneq ($(origin CI), undefined)
 	WORKDIR := $(GOPATH)/src/github.com/docker-fetch
 endif
 
+build:
+	gox -os="linux" -arch="amd64" -output="docker-fetch.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
 
 test:
 	@cd $(WORKDIR); \

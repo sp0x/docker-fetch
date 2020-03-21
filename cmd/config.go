@@ -15,8 +15,8 @@ func initConfig() {
 	globalFlags.Usage = usage
 	verbose := false
 	outputDir := ""
-	globalFlags.BoolVar(&verbose, "verbose", false, "Enable verbose output")
-	globalFlags.StringVar(&outputDir, "dist", outputDir, "Set the output directory")
+	globalFlags.BoolVar(&verbose, "v", false, "Enable verbose output")
+	globalFlags.StringVar(&outputDir, "d", outputDir, "Set the output directory. If not set, the repository is cloned in a new directory inside the current working directory.")
 	args := os.Args[1:]
 	err := globalFlags.Parse(args)
 	if err != nil {
