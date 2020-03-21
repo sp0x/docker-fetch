@@ -10,7 +10,7 @@ import (
 import "flag"
 
 var globalFlags = flag.NewFlagSet("", flag.ExitOnError)
-var globalConfig *Config
+var globalConfig *config
 
 func init() {
 	log.SetFormatter(&log.TextFormatter{

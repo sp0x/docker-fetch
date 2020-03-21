@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type Config struct {
+type config struct {
 	Verbose bool
 	Dist    string
 }
@@ -23,7 +23,7 @@ func initConfig() {
 		_, _ = fmt.Fprint(os.Stderr, fmt.Errorf("arguments error: %s", err))
 		os.Exit(1)
 	}
-	globalConfig = &Config{Verbose: verbose, Dist: outputDir}
+	globalConfig = &config{Verbose: verbose, Dist: outputDir}
 	if !verbose {
 		log.SetLevel(log.WarnLevel)
 	}
