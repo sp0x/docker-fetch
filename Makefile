@@ -16,7 +16,7 @@ COVERAGE_MODE = atomic
 NAME=docker-fetch
 
 ifneq ($(origin CI), undefined)
-	WORKDIR := $(GOPATH)/src/github.com/$NAME
+	WORKDIR := $(GOPATH)/src/github.com/$(NAME)
 endif
 
 build:
