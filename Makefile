@@ -13,13 +13,17 @@ GIT_REPOSITORY = http://github.com/git/git.git
 # Coverage
 COVERAGE_REPORT = coverage.txt
 COVERAGE_MODE = atomic
+NAME=docker-fetch
 
 ifneq ($(origin CI), undefined)
-	WORKDIR := $(GOPATH)/src/github.com/docker-fetch
+	WORKDIR := $(GOPATH)/src/github.com/$NAME
 endif
 
 build:
-	gox -os="linux" -arch="amd64" -output="docker-fetch.{{.OS}}.{{.Arch}}" -ldflags "-s -w -X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
+	gox -os="linux" -arch="amd64" -output="$(NAME).{{.OS}}.{{.Arch}}" -ldflags "-s -w -X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
+
+install:
+	go build -i -o $(GOPATH)/bin/$(NAME) ./cmd
 
 test:
 	@cd $(WORKDIR); \
