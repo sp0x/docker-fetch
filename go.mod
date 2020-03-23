@@ -1,4 +1,4 @@
-module docker-fetch
+module github.com/sp0x/docker-fetch
 
 go 1.12
 
